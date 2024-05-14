@@ -14,6 +14,7 @@ namespace SpaceInvaders.EntitiyRelated
         public Sprite(string spriteImagePath)
         {
             SpriteImage = new Bitmap(spriteImagePath);
+
             Pivot = new Coordinate2D(spriteImage.Width / 2, spriteImage.Height / 2);
         }
 

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SpaceInvaders.EntitiyRelated
 {
-    internal class Player : Entitiy
+    internal class Player : Entity
     {
         private string name;
 
@@ -17,5 +19,18 @@ namespace SpaceInvaders.EntitiyRelated
         }
 
         public string Name { get => name; set => name = value; }
+
+        public void Move(Keys keyDown)
+        {
+            if (keyDown == Keys.A)
+            {
+                Coord.X--;
+            }
+            else if (keyDown == Keys.D)
+            {
+                Coord.X++;
+            }
+            Debug.WriteLine($"{keyDown}");
+        }
     }
 }

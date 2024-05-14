@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SpaceInvaders.EntitiyRelated
 {
-    internal class Entitiy
+    internal class Entity
     {
         private Coordinate2D coord;
         private Sprite sprite;
 
-        public Entitiy(string spritePath, int posX, int posY)
+        public Entity(string spritePath, int posX, int posY)
         {
             Sprite = new Sprite(spritePath);
             Coord = new Coordinate2D(posX - Sprite.Pivot.X, posY - Sprite.Pivot.Y);
