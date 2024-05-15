@@ -20,6 +20,8 @@ namespace SpaceInvaders
         private readonly Stopwatch stopwatch = new Stopwatch();
 
         public static double deltaTime = 0;
+        private Bitmap bufferMap;
+        private Graphics bufferGraphics;
 
         public GameWindow()
         {
@@ -30,6 +32,9 @@ namespace SpaceInvaders
             MaximizeBox = false;
             MinimizeBox = false;
             Text = "Space Invaders";
+
+            bufferMap = new(Width, Height);
+            bufferGraphics = Graphics.FromImage(bufferMap);
 
             p = EntityHandler.CreatePlayer("p", 400, 500);
             EntityHandler.CreateEnemy(400, 100);
@@ -93,17 +98,24 @@ namespace SpaceInvaders
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.Clear(BackColor);
-            RenderEntities(e);
+            bufferGraphics.Clear(BackColor);
+            RenderEntities();
+
+            e.Graphics.DrawImage(bufferMap, 0, 0);
 
             base.OnPaint(e);
         }
 
-        private static void RenderEntities(PaintEventArgs e)
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            // Do nothing to prevent flickering
+        }
+
+        private void RenderEntities()
         {
             foreach (var entity in EntityHandler.Entities)
             {
-                e.Graphics.DrawImage(entity.Sprite.SpriteImage, entity.Coord.X, entity.Coord.Y, 45, 45);
+                bufferGraphics.DrawImage(entity.Sprite.SpriteImage, entity.Coord.X, entity.Coord.Y, 45, 45);
             }
         }
     }
