@@ -14,7 +14,7 @@ namespace SpaceInvaders.EntitiyRelated
         private float moveSpeed = 50f;
 
         public Enemy(int posX, int posY)
-            : base("C:\\Users\\Nico\\source\\repos\\C#\\SpaceInvaders\\SpaceInvaders\\Assets\\Enemy.png", posX, posY)
+            : base(Assets.Assets.AssetsPath + "\\enemy.png", posX, posY)
         {
             maxX = posX + 50;
             minX = posX - 50;
