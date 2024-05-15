@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SpaceInvaders.Controls;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace SpaceInvaders.EntitiyRelated
     internal class Player : Entity
     {
         private string name;
+        private float moveSpeed = 100f;
 
         public Player(string name, int posX, int posY)
             : base("C:\\Users\\Nico\\source\\repos\\C#\\SpaceInvaders\\SpaceInvaders\\Assets\\Panzer.png", posX, posY)
@@ -20,17 +23,17 @@ namespace SpaceInvaders.EntitiyRelated
 
         public string Name { get => name; set => name = value; }
 
-        public void Move(Keys keyDown)
+        public void Move()
         {
-            if (keyDown == Keys.A)
+            BitArray keys = InputController.Keys;
+            if (keys[((int)KeyIndex.Left)] || keys[((int)KeyIndex.A)])
             {
-                Coord.X--;
+                Coord.X -= moveSpeed * (float)GameWindow.deltaTime;
             }
-            else if (keyDown == Keys.D)
+            else if (keys[((int)KeyIndex.Right)] || keys[(int)KeyIndex.D])
             {
-                Coord.X++;
+                Coord.X += moveSpeed * (float)GameWindow.deltaTime;
             }
-            Debug.WriteLine($"{keyDown}");
         }
     }
 }
