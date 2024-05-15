@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.VisualBasic.Devices;
+﻿using SpaceInvaders.Controls;
 using SpaceInvaders.EntitiyRelated;
 using SpaceInvaders.EntityRelated;
-using SpaceInvaders.Controls;
+using System.Diagnostics;
 
 namespace SpaceInvaders
 {
@@ -17,7 +10,7 @@ namespace SpaceInvaders
         private readonly System.Timers.Timer gameTimer;
         private Player p;
         private int frameCounter = 1;
-        private readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch = new();
 
         public static double deltaTime = 0;
         private Bitmap bufferMap;
