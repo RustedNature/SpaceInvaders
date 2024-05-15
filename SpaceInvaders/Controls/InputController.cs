@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace SpaceInvaders.Controls
 {
@@ -18,23 +13,23 @@ namespace SpaceInvaders.Controls
             switch (key)
             {
                 case System.Windows.Forms.Keys.Left:
-                    Keys[((int)KeyIndex.Left)] = true;
+                    Keys[(int)KeyIndex.Left] = true;
                     break;
 
                 case System.Windows.Forms.Keys.Right:
-                    Keys[((int)KeyIndex.Right)] = true;
+                    Keys[(int)KeyIndex.Right] = true;
                     break;
 
                 case System.Windows.Forms.Keys.A:
-                    Keys[((int)KeyIndex.A)] = true;
+                    Keys[(int)KeyIndex.A] = true;
                     break;
 
                 case System.Windows.Forms.Keys.D:
-                    Keys[((int)KeyIndex.D)] = true;
+                    Keys[(int)KeyIndex.D] = true;
                     break;
 
                 case System.Windows.Forms.Keys.Space:
-                    Keys[((int)KeyIndex.Space)] = true;
+                    Keys[(int)KeyIndex.Space] = true;
                     break;
             }
         }
@@ -44,23 +39,23 @@ namespace SpaceInvaders.Controls
             switch (key)
             {
                 case System.Windows.Forms.Keys.Left:
-                    Keys[((int)KeyIndex.Left)] = false;
+                    Keys[(int)KeyIndex.Left] = false;
                     break;
 
                 case System.Windows.Forms.Keys.Right:
-                    Keys[((int)KeyIndex.Right)] = false;
+                    Keys[(int)KeyIndex.Right] = false;
                     break;
 
                 case System.Windows.Forms.Keys.A:
-                    Keys[((int)KeyIndex.A)] = false;
+                    Keys[(int)KeyIndex.A] = false;
                     break;
 
                 case System.Windows.Forms.Keys.D:
-                    Keys[((int)KeyIndex.D)] = false;
+                    Keys[(int)KeyIndex.D] = false;
                     break;
 
                 case System.Windows.Forms.Keys.Space:
-                    Keys[((int)KeyIndex.Space)] = false;
+                    Keys[(int)KeyIndex.Space] = false;
                     break;
             }
         }
