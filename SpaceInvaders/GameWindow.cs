@@ -25,6 +25,7 @@ namespace SpaceInvaders
             MaximizeBox = false;
             MinimizeBox = false;
             Text = "Space Invaders";
+            ClientSize = new Size(Width, Height);
 
             bufferMap = new(Width, Height);
             bufferGraphics = Graphics.FromImage(bufferMap);
