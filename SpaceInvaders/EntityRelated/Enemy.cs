@@ -12,19 +12,20 @@ namespace SpaceInvaders.EntityRelated
         private float minX;
         private bool isMoveingLeft = true;
         private float moveSpeed = 50f;
+        private static readonly string spritePath = Assets.Assets.AssetsPath + "\\enemy.png";
 
         public Enemy(int posX, int posY)
-            : base(Assets.Assets.AssetsPath + "\\enemy.png", posX, posY)
+            : base(spritePath, posX, posY)
         {
             maxX = posX + 50;
             minX = posX - 50;
         }
 
-        public void Move()
+        public override void Move()
         {
             if (isMoveingLeft)
             {
-                Coord.X -= moveSpeed * ((float)GameWindow.deltaTime);
+                Coord.X -= moveSpeed * ((float)GameWindow.DeltaTime);
                 if (minX > Coord.X)
                 {
                     isMoveingLeft = false;
@@ -33,7 +34,7 @@ namespace SpaceInvaders.EntityRelated
 
             if (!isMoveingLeft)
             {
-                Coord.X += moveSpeed * ((float)GameWindow.deltaTime);
+                Coord.X += moveSpeed * ((float)GameWindow.DeltaTime);
 
                 if (maxX < Coord.X)
                 {
