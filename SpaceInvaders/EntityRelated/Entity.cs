@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpaceInvaders.EntitiyRelated
+namespace SpaceInvaders.EntityRelated
 {
     internal class Entity
     {

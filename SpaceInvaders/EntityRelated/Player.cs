@@ -1,7 +1,7 @@
 ﻿using SpaceInvaders.Controls;
 using System.Collections;
 
-namespace SpaceInvaders.EntitiyRelated
+namespace SpaceInvaders.EntityRelated
 {
     internal class Player : Entity
     {

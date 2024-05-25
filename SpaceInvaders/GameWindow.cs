@@ -1,5 +1,4 @@
 ﻿using SpaceInvaders.Controls;
-using SpaceInvaders.EntitiyRelated;
 using SpaceInvaders.EntityRelated;
 using System.Diagnostics;
 
