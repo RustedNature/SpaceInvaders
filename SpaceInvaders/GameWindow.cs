@@ -4,21 +4,30 @@ using System.Diagnostics;
 
 namespace SpaceInvaders
 {
-    internal class GameWindow : Form
+    internal class GameWindow : Form, IDisposable
     {
         private readonly System.Timers.Timer gameTimer;
-        private Player p;
         private int frameCounter = 1;
         private readonly Stopwatch stopwatch = new();
+        private const int screenWidth = 800;
+        private const int screenHeigth = 600;
+        private static double deltaTime = 0;
 
-        public static double deltaTime = 0;
         private Bitmap bufferMap;
         private Graphics bufferGraphics;
+        private bool isGameLoopRunning;
+        private readonly object graphicsLock = new();
+
+        public static double DeltaTime { get => deltaTime; private set => deltaTime = value; }
+
+        public static int ScreenWidth => screenWidth;
+
+        public static int ScreenHeigth => screenHeigth;
 
         public GameWindow()
         {
-            Width = 800;
-            Height = 600;
+            Width = ScreenWidth;
+            Height = ScreenHeigth;
             BackColor = Color.Black;
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
@@ -26,17 +35,14 @@ namespace SpaceInvaders
             Text = "Space Invaders";
             ClientSize = new Size(Width, Height);
 
-            bufferMap = new(Width, Height);
+            bufferMap = new Bitmap(ScreenWidth, ScreenHeigth);
             bufferGraphics = Graphics.FromImage(bufferMap);
 
-            p = EntityHandler.CreatePlayer("p", 400, 500);
-            EntityHandler.CreateEnemy(400, 100);
-            EntityHandler.CreateEnemy(100, 100);
-            EntityHandler.CreateEnemy(700, 100);
+            EntityHandler.CreateEntities();
 
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
-            gameTimer = new()
+            gameTimer = new System.Timers.Timer
             {
                 Interval = 1000f / 60f
             };
@@ -58,43 +64,70 @@ namespace SpaceInvaders
 
         private void GameLoop(object? sender, EventArgs e)
         {
-            deltaTime = stopwatch.Elapsed.TotalSeconds;
-            stopwatch.Restart();
+            if (InvokeRequired)
+            {
+                Invoke(new Action<object, EventArgs>(GameLoop), sender, e);
+                return;
+            }
 
-            GameUpdate();
+            if (isGameLoopRunning)
+                return;
 
-            Invalidate();
+            lock (graphicsLock)
+            {
+                if (isGameLoopRunning)
+                    return;
+                isGameLoopRunning = true;
+            }
+
+            try
+            {
+                DeltaTime = stopwatch.Elapsed.TotalSeconds;
+                stopwatch.Restart();
+
+                GameUpdate();
+
+                Invalidate();
+            }
+            finally
+            {
+                isGameLoopRunning = false;
+            }
         }
 
         private void GameUpdate()
         {
-            p.Move();
-            MoveEnemies();
-            Debuging();
+            MoveEntities();
+            EntityHandler.UpateActiveEntitiesList();
+            Debugging();
         }
 
-        private static void MoveEnemies()
+        private static void MoveEntities()
         {
-            var enemies = EntityHandler.Entities.OfType<Enemy>();
+            //Copy into temporary list to bypass exception
+            var tempEntities = new List<Entity>(EntityHandler.Entities);
 
-            foreach (var enemy in enemies)
+            foreach (var entity in tempEntities)
             {
-                enemy.Move();
+                entity.Move();
             }
         }
 
-        private void Debuging()
+        private void Debugging()
         {
             Debug.WriteLine($"Frame: {frameCounter++}");
-            Debug.WriteLine($"LastDeltaTime: {deltaTime}");
+            Debug.WriteLine($"LastDeltaTime: {DeltaTime}");
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            bufferGraphics.Clear(BackColor);
-            RenderEntities();
+            lock (graphicsLock)
+            {
+                bufferGraphics.Clear(BackColor);
+                RenderEntities();
 
-            e.Graphics.DrawImage(bufferMap, 0, 0);
+                e.Graphics.DrawImage(bufferMap, 0, 0);
+            }
 
             base.OnPaint(e);
         }
@@ -106,10 +139,11 @@ namespace SpaceInvaders
 
         private void RenderEntities()
         {
-            foreach (var entity in EntityHandler.Entities)
+            EntityHandler.Entities.ForEach(e =>
             {
-                bufferGraphics.DrawImage(entity.Sprite.SpriteImage, entity.Coord.X, entity.Coord.Y, 45, 45);
-            }
+                bufferGraphics.DrawImage(e.Sprite.SpriteImage, e.Coord.X, e.Coord.Y, e.Sprite.SpriteImage.Width, e.Sprite.SpriteImage.Height);
+                //Debug.WriteLine($"{e} drawn at X:{e.Coord.X} Y:{e.Coord.Y} and its {e.Sprite.SpriteImage.Width}x{e.Sprite.SpriteImage.Height}");
+            });
         }
     }
 }
