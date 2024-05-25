@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,22 +8,51 @@ namespace SpaceInvaders.EntityRelated
 {
     internal static class EntityHandler
     {
-        private static List<Entity> entities = new();
+        private static List<Entity> activeEntities = new();
+        private static List<Entity> markedForRemoveEntities = new();
 
-        internal static List<Entity> Entities { get => entities; set => entities = value; }
+        internal static List<Entity> Entities { get => activeEntities; set => activeEntities = value; }
 
         public static Player CreatePlayer(string name, int posX, int posY)
         {
             Player p = new(name, posX, posY);
-            entities.Add(p);
+            activeEntities.Add(p);
             return p;
         }
 
         public static Enemy CreateEnemy(int posX, int posY)
         {
             Enemy e = new(posX, posY);
-            entities.Add(e);
+            activeEntities.Add(e);
             return e;
+        }
+
+        public static void CreateEntities()
+        {
+            CreateEnemy(400, 100);
+            CreateEnemy(100, 100);
+            CreateEnemy(700, 100);
+            CreatePlayer("Player", 400, 600 - 46);
+        }
+
+        public static void CreateBullet(float startX, float starY)
+        {
+            activeEntities.Add(new Bullet(startX, starY));
+        }
+
+        public static void UpateActiveEntitiesList()
+        {
+            foreach (var marked in markedForRemoveEntities)
+            {
+                activeEntities.Remove(marked);
+            }
+
+            markedForRemoveEntities.Clear();
+        }
+
+        internal static void MarkForRemove(Entity entity)
+        {
+            markedForRemoveEntities.Add(entity);
         }
     }
 }
