@@ -29,10 +29,12 @@ namespace SpaceInvaders.EntityRelated
                 return;
             }
             Coord.Y -= MoveSpeed * (float)GameWindow.DeltaTime;
+            base.Move();
         }
 
         ~Bullet()
         {
+            ColliderList.Collider.Remove(this.Collider);
             Debug.WriteLine(this.ToString() + " destroyed");
         }
     }

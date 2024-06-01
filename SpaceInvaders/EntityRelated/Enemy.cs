@@ -41,6 +41,7 @@ namespace SpaceInvaders.EntityRelated
                     isMoveingLeft = true;
                 }
             }
+            base.Move();
         }
     }
 }
