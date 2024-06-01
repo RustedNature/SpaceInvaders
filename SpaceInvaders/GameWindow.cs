@@ -64,24 +64,24 @@ namespace SpaceInvaders
 
         private void GameLoop(object? sender, EventArgs e)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<object, EventArgs>(GameLoop), sender, e);
-                return;
-            }
-
-            if (isGameLoopRunning)
-                return;
-
-            lock (graphicsLock)
-            {
-                if (isGameLoopRunning)
-                    return;
-                isGameLoopRunning = true;
-            }
-
             try
             {
+                if (InvokeRequired)
+                {
+                    Invoke(new Action<object, EventArgs>(GameLoop), sender, e);
+                    return;
+                }
+
+                if (isGameLoopRunning)
+                    return;
+
+                lock (graphicsLock)
+                {
+                    if (isGameLoopRunning)
+                        return;
+                    isGameLoopRunning = true;
+                }
+
                 DeltaTime = stopwatch.Elapsed.TotalSeconds;
                 stopwatch.Restart();
 
