@@ -10,16 +10,15 @@ namespace SpaceInvaders.EntityRelated
 {
     internal class Bullet : Entity
     {
+        private static string spritePath = Assets.Assets.AssetsPath + "\\bullet.png";
         private float moveSpeed = 250f;
 
-        private static string spritePath = Assets.Assets.AssetsPath + "\\bullet.png";
-
-        public Bullet(float posX, float posY) : base(SpritePath, posX, posY)
+        public Bullet(float posX, float posY, Tags tag) : base(SpritePath, posX, posY, tag)
         {
         }
 
-        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public static string SpritePath { get => spritePath; set => spritePath = value; }
+        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 
         public override void Move()
         {
@@ -32,10 +31,19 @@ namespace SpaceInvaders.EntityRelated
             base.Move();
         }
 
-        ~Bullet()
+        internal override void Destroy()
         {
-            ColliderList.Collider.Remove(this.Collider);
-            Debug.WriteLine(this.ToString() + " destroyed");
+            EntityHandler.MarkForRemove(this);
+            ColliderList.MarkForRemove(Collider);
+        }
+
+        internal override void OnCollision(Entity sender, EventArgs e)
+        {
+            if (sender.Tag != Tags.Player && sender.Tag != Tags.PlayerBullet)
+            {
+                Destroy();
+                sender.Destroy();
+            }
         }
     }
 }

@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpaceInvaders.EntityRelated
+﻿namespace SpaceInvaders.EntityRelated
 {
     internal class Enemy : Entity
     {
+        private static readonly string spritePath = Assets.Assets.AssetsPath + "\\enemy.png";
+        private bool isMoveingLeft = true;
         private float maxX;
         private float minX;
-        private bool isMoveingLeft = true;
         private float moveSpeed = 50f;
-        private static readonly string spritePath = Assets.Assets.AssetsPath + "\\enemy.png";
 
         public Enemy(int posX, int posY)
-            : base(spritePath, posX, posY)
+            : base(spritePath, posX, posY, Tags.Enemy)
         {
             maxX = posX + 50;
             minX = posX - 50;
@@ -42,6 +36,20 @@ namespace SpaceInvaders.EntityRelated
                 }
             }
             base.Move();
+        }
+
+        internal override void Destroy()
+        {
+            EntityHandler.MarkForRemove(this);
+            ColliderList.MarkForRemove(Collider);
+        }
+
+        internal override void OnCollision(Entity sender, EventArgs e)
+        {
+            if (sender.Tag == Tags.PlayerBullet)
+            {
+                Destroy();
+            }
         }
     }
 }

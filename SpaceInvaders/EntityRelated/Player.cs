@@ -6,20 +6,19 @@ namespace SpaceInvaders.EntityRelated
 {
     internal class Player : Entity
     {
-        private string name;
-        private readonly float moveSpeed = 100f;
         private static readonly string spritePath = Assets.Assets.AssetsPath + "\\panzer.png";
+        private readonly float moveSpeed = 100f;
         private bool isShooting = false;
+        private string name;
 
         public Player(string name, int posX, int posY)
-            : base(SpritePath, posX, posY)
+            : base(SpritePath, posX, posY, Tags.Player)
         {
             Name = name;
         }
 
-        public string Name { get => name; set => name = value; }
-
         public static string SpritePath => spritePath;
+        public string Name { get => name; set => name = value; }
 
         public override void Move()
         {
@@ -34,7 +33,7 @@ namespace SpaceInvaders.EntityRelated
             }
             if (keys[(int)KeyIndex.Space] && !isShooting)
             {
-                EntityHandler.CreateBullet(Coord.X, Coord.Y);
+                EntityHandler.CreateBullet(Coord.X, Coord.Y, Tags.PlayerBullet);
                 isShooting = true;
             }
             else
@@ -42,6 +41,18 @@ namespace SpaceInvaders.EntityRelated
                 isShooting = false;
             }
             base.Move();
+        }
+
+        internal override void Destroy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void OnCollision(Entity sender, EventArgs e)
+        {
+            if (sender.Tag == Tags.EnemyBullet)
+            {
+            }
         }
     }
 }
