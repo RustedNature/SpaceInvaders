@@ -48,6 +48,7 @@
         {
             if (sender.Tag == Tags.PlayerBullet)
             {
+                sender.Destroy();
                 Destroy();
             }
         }
