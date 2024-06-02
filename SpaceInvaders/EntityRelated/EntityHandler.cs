@@ -8,6 +8,12 @@ namespace SpaceInvaders.EntityRelated
 {
     internal static class EntityHandler
     {
+        private const int MaxEnemies = 10;
+        private const int SpriteWidth = 46;
+        private const int SpriteHeight = 46;
+        private const int GapSpots = 11;
+        private const int VerticalGapBetweenEnemies = 15;
+        private const int EnemyRowsPlusOne = 6;
         private static List<Entity> activeEntities = new();
         private static List<Entity> markedForRemoveEntities = new();
 
@@ -16,7 +22,9 @@ namespace SpaceInvaders.EntityRelated
 
         public static void CreateBullet(float startX, float starY, Tags tag)
         {
-            activeEntities.Add(new Bullet(startX, starY, tag));
+            Bullet bullet = new Bullet(startX, starY, tag);
+            bullet.AdjustSpritePosition();
+            activeEntities.Add(bullet);
         }
 
         public static Enemy CreateEnemy(int posX, int posY)
@@ -28,10 +36,26 @@ namespace SpaceInvaders.EntityRelated
 
         public static void CreateEntities()
         {
-            CreateEnemy(400, 100);
-            CreateEnemy(100, 100);
-            CreateEnemy(700, 100);
+            CreateEnemyGrid();
+
             CreatePlayer("Player", 400, 600 - 46);
+        }
+
+        private static void CreateEnemyGrid()
+        {
+            int distanceBetweenTwoEnemies = (GameWindow.ScreenWidth - MaxEnemies * SpriteWidth) / GapSpots;
+            for (int y = 1; y < EnemyRowsPlusOne; y++)
+            {
+                for (int x = 1; x < GapSpots; x++)
+                {
+                    if (x == 1)
+                    {
+                        CreateEnemy(distanceBetweenTwoEnemies, (SpriteHeight + VerticalGapBetweenEnemies) * y);
+                        continue;
+                    }
+                    CreateEnemy(distanceBetweenTwoEnemies * x + (x - 1) * SpriteWidth, (SpriteHeight + VerticalGapBetweenEnemies) * y);
+                }
+            }
         }
 
         public static Player CreatePlayer(string name, int posX, int posY)
