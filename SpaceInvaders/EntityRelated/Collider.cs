@@ -10,7 +10,22 @@ namespace SpaceInvaders.EntityRelated
 {
     internal static class ColliderList
     {
-        public static List<Collider> Collider = new List<Collider>();
+        private static List<Collider> collider = new List<Collider>();
+        private static List<Collider> colliderMarkedForRemove = new List<Collider>();
+
+        internal static List<Collider> Collider { get => collider; set => collider = value; }
+        internal static List<Collider> ColliderMarkedForRemove { get => colliderMarkedForRemove; set => colliderMarkedForRemove = value; }
+
+        internal static void MarkForRemove(Collider collider)
+        {
+            ColliderMarkedForRemove.Add(collider);
+        }
+
+        internal static void UpdateColliderList()
+        {
+            ColliderMarkedForRemove.ForEach(c => Collider.Remove(c));
+            ColliderMarkedForRemove.Clear();
+        }
     }
 
     internal class Collider
