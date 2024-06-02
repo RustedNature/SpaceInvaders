@@ -6,9 +6,9 @@ namespace SpaceInvaders.EntityRelated
 {
     internal class Player : Entity
     {
+        private const int MaxPlayerBulltets = 1;
         private static readonly string spritePath = Assets.Assets.AssetsPath + "\\panzer.png";
         private readonly float moveSpeed = 100f;
-        private bool isShooting = false;
         private string name;
 
         public Player(string name, int posX, int posY)
@@ -31,15 +31,11 @@ namespace SpaceInvaders.EntityRelated
             {
                 Coord.X += moveSpeed * (float)GameWindow.DeltaTime;
             }
-            if (keys[(int)KeyIndex.Space] && !isShooting)
+            if (keys[(int)KeyIndex.Space] && EntityHandler.GetAmountOfPlayerBullets() < MaxPlayerBulltets)
             {
                 EntityHandler.CreateBullet(Coord.X, Coord.Y, Tags.PlayerBullet);
-                isShooting = true;
             }
-            else
-            {
-                isShooting = false;
-            }
+
             base.Move();
         }
 
