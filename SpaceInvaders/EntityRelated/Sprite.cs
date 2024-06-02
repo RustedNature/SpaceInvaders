@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpaceInvaders.EntityRelated
+﻿namespace SpaceInvaders.EntityRelated
 {
     internal class Sprite
     {
-        private Bitmap spriteImage;
         private Coordinate2D pivot;
+        private Bitmap spriteImage;
 
         public Sprite(string spriteImagePath)
         {
