@@ -12,12 +12,11 @@ namespace SpaceInvaders.EntityRelated
         private static List<Entity> markedForRemoveEntities = new();
 
         internal static List<Entity> Entities { get => activeEntities; set => activeEntities = value; }
+        internal static List<Entity> MarkedForRemoveEntities { get => markedForRemoveEntities; set => markedForRemoveEntities = value; }
 
-        public static Player CreatePlayer(string name, int posX, int posY)
+        public static void CreateBullet(float startX, float starY, Tags tag)
         {
-            Player p = new(name, posX, posY);
-            activeEntities.Add(p);
-            return p;
+            activeEntities.Add(new Bullet(startX, starY, tag));
         }
 
         public static Enemy CreateEnemy(int posX, int posY)
@@ -35,24 +34,26 @@ namespace SpaceInvaders.EntityRelated
             CreatePlayer("Player", 400, 600 - 46);
         }
 
-        public static void CreateBullet(float startX, float starY)
+        public static Player CreatePlayer(string name, int posX, int posY)
         {
-            activeEntities.Add(new Bullet(startX, starY));
+            Player p = new(name, posX, posY);
+            activeEntities.Add(p);
+            return p;
         }
 
         public static void UpateActiveEntitiesList()
         {
-            foreach (var marked in markedForRemoveEntities)
+            foreach (var marked in MarkedForRemoveEntities)
             {
                 activeEntities.Remove(marked);
             }
 
-            markedForRemoveEntities.Clear();
+            MarkedForRemoveEntities.Clear();
         }
 
         internal static void MarkForRemove(Entity entity)
         {
-            markedForRemoveEntities.Add(entity);
+            MarkedForRemoveEntities.Add(entity);
         }
     }
 }
