@@ -11,8 +11,8 @@
         public Enemy(int posX, int posY)
             : base(spritePath, posX, posY, Tags.Enemy)
         {
-            maxX = posX + 50;
-            minX = posX - 50;
+            maxX = posX + 30;
+            minX = posX - 30;
         }
 
         public override void Move()
