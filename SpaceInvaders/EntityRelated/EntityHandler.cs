@@ -41,6 +41,11 @@ namespace SpaceInvaders.EntityRelated
             return p;
         }
 
+        public static int GetAmountOfPlayerBullets()
+        {
+            return activeEntities.Count(e => e.Tag == Tags.PlayerBullet);
+        }
+
         public static void UpateActiveEntitiesList()
         {
             foreach (var marked in MarkedForRemoveEntities)
