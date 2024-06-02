@@ -20,6 +20,11 @@ namespace SpaceInvaders.EntityRelated
         public static string SpritePath { get => spritePath; set => spritePath = value; }
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
 
+        public void AdjustSpritePosition()
+        {
+            Coord.X -= Sprite.SpriteImage.Width / 2;
+        }
+
         public override void Move()
         {
             if (Coord.Y <= 50)
