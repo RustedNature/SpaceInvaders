@@ -24,7 +24,7 @@ namespace SpaceInvaders.EntityRelated
         {
             if (Coord.Y <= 50)
             {
-                EntityHandler.MarkForRemove(this);
+                Destroy();
                 return;
             }
             Coord.Y -= MoveSpeed * (float)GameWindow.DeltaTime;
