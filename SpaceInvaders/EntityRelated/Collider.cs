@@ -32,15 +32,17 @@ namespace SpaceInvaders.EntityRelated
     {
         private Entity entity;
 
-        internal Entity Entity { get => entity; private set => entity = value; }
-
-        public event EventHandler OnCollision;
-
         public Collider(Entity entity)
         {
             this.Entity = entity;
             ColliderList.Collider.Add(this);
         }
+
+        public delegate void CollisionEventHandler(Entity sender, EventArgs e);
+
+        public event CollisionEventHandler OnCollision;
+
+        internal Entity Entity { get => entity; private set => entity = value; }
 
         public void IsColliding()
         {
@@ -61,7 +63,7 @@ namespace SpaceInvaders.EntityRelated
                         || coordinateLeftUpper < coordinateLeftLowerCol && coordinateRightLower > coordinateLeftLowerCol
                         || coordinateLeftUpper < coordinateRightLowerCol && coordinateRightLower > coordinateRightLowerCol)
                     {
-                        Debug.WriteLine($"{nameof(Entity)} collided with {nameof(col.Entity)}");
+                        OnCollision(col.Entity, EventArgs.Empty);
                     }
                 }
             }
