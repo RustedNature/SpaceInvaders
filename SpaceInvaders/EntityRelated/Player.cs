@@ -33,7 +33,7 @@ namespace SpaceInvaders.EntityRelated
             }
             if (keys[(int)KeyIndex.Space] && EntityHandler.GetAmountOfPlayerBullets() < MaxPlayerBulltets)
             {
-                EntityHandler.CreateBullet(Coord.X, Coord.Y, Tags.PlayerBullet);
+                EntityHandler.CreateBullet(Coord.X + Sprite.SpriteImage.Width / 2, Coord.Y, Tags.PlayerBullet);
             }
 
             base.Move();
