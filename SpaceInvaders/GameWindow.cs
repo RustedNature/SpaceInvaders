@@ -6,23 +6,16 @@ namespace SpaceInvaders
 {
     internal class GameWindow : Form, IDisposable
     {
-        private readonly System.Timers.Timer gameTimer;
-        private int frameCounter = 1;
-        private readonly Stopwatch stopwatch = new();
-        private const int screenWidth = 800;
         private const int screenHeigth = 600;
+        private const int screenWidth = 800;
         private static double deltaTime = 0;
-
-        private Bitmap bufferMap;
-        private Graphics bufferGraphics;
-        private bool isGameLoopRunning;
+        private readonly System.Timers.Timer gameTimer;
         private readonly object graphicsLock = new();
-
-        public static double DeltaTime { get => deltaTime; private set => deltaTime = value; }
-
-        public static int ScreenWidth => screenWidth;
-
-        public static int ScreenHeigth => screenHeigth;
+        private readonly Stopwatch stopwatch = new();
+        private Graphics bufferGraphics;
+        private Bitmap bufferMap;
+        private int frameCounter = 1;
+        private bool isGameLoopRunning;
 
         public GameWindow()
         {
@@ -42,6 +35,7 @@ namespace SpaceInvaders
 
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
+
             gameTimer = new System.Timers.Timer
             {
                 Interval = 1000f / 60f
@@ -52,14 +46,44 @@ namespace SpaceInvaders
             gameTimer.Start();
         }
 
-        private void OnKeyUp(object? sender, KeyEventArgs e)
+        public static double DeltaTime { get => deltaTime; private set => deltaTime = value; }
+
+        public static int ScreenHeigth => screenHeigth;
+        public static int ScreenWidth => screenWidth;
+
+        protected override void OnPaint(PaintEventArgs e)
         {
-            InputController.ResetKey(e.KeyCode);
+            lock (graphicsLock)
+            {
+                bufferGraphics.Clear(BackColor);
+                RenderEntities();
+
+                e.Graphics.DrawImage(bufferMap, 0, 0);
+            }
+
+            base.OnPaint(e);
         }
 
-        private void OnKeyDown(object? sender, KeyEventArgs e)
+        protected override void OnPaintBackground(PaintEventArgs e)
         {
-            InputController.SetKey(e.KeyCode);
+            // Do nothing to prevent flickering
+        }
+
+        private static void MoveEntities()
+        {
+            //Copy into temporary list to bypass exception
+            var tempEntities = new List<Entity>(EntityHandler.Entities);
+
+            foreach (var entity in tempEntities)
+            {
+                entity.Move();
+            }
+        }
+
+        private void Debugging()
+        {
+            Debug.WriteLine($"Frame: {frameCounter++}");
+            Debug.WriteLine($"LastDeltaTime: {DeltaTime}");
         }
 
         private void GameLoop(object? sender, EventArgs e)
@@ -99,42 +123,18 @@ namespace SpaceInvaders
         {
             MoveEntities();
             EntityHandler.UpateActiveEntitiesList();
+            ColliderList.UpdateColliderList();
             Debugging();
         }
 
-        private static void MoveEntities()
+        private void OnKeyDown(object? sender, KeyEventArgs e)
         {
-            //Copy into temporary list to bypass exception
-            var tempEntities = new List<Entity>(EntityHandler.Entities);
-
-            foreach (var entity in tempEntities)
-            {
-                entity.Move();
-            }
+            InputController.SetKey(e.KeyCode);
         }
 
-        private void Debugging()
+        private void OnKeyUp(object? sender, KeyEventArgs e)
         {
-            Debug.WriteLine($"Frame: {frameCounter++}");
-            Debug.WriteLine($"LastDeltaTime: {DeltaTime}");
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            lock (graphicsLock)
-            {
-                bufferGraphics.Clear(BackColor);
-                RenderEntities();
-
-                e.Graphics.DrawImage(bufferMap, 0, 0);
-            }
-
-            base.OnPaint(e);
-        }
-
-        protected override void OnPaintBackground(PaintEventArgs e)
-        {
-            // Do nothing to prevent flickering
+            InputController.ResetKey(e.KeyCode);
         }
 
         private void RenderEntities()
