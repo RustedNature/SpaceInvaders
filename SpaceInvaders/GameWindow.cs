@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace SpaceInvaders
 {
-    internal class GameWindow : Form, IDisposable
+    internal class GameWindow : Form
     {
         private const int screenHeigth = 600;
         private const int screenWidth = 800;
