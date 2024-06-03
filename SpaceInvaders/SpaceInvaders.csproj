@@ -7,6 +7,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\README.md" />
+  </ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\panzer.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

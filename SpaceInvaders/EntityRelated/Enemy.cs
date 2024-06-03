@@ -7,35 +7,54 @@
         private float maxX;
         private float minX;
         private float moveSpeed = 50f;
+        private Random random = new();
 
         public Enemy(int posX, int posY)
-            : base(spritePath, posX, posY, Tags.Enemy)
+            : base(SpritePath, posX, posY, Tags.Enemy)
         {
-            maxX = posX + 30;
-            minX = posX - 30;
+            MaxX = posX + 30;
+            MinX = posX - 30;
         }
+
+        public static string SpritePath => spritePath;
+
+        public bool IsMoveingLeft { get => isMoveingLeft; set => isMoveingLeft = value; }
+        public float MaxX { get => maxX; set => maxX = value; }
+        public float MinX { get => minX; set => minX = value; }
+        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+        public Random Random { get => random; set => random = value; }
 
         public override void Move()
         {
-            if (isMoveingLeft)
+            if (IsMoveingLeft)
             {
-                Coord.X -= moveSpeed * ((float)GameWindow.DeltaTime);
-                if (minX > Coord.X)
+                Coord.X -= MoveSpeed * ((float)GameWindow.DeltaTime);
+                if (MinX > Coord.X)
                 {
-                    isMoveingLeft = false;
+                    IsMoveingLeft = false;
                 }
             }
 
-            if (!isMoveingLeft)
+            if (!IsMoveingLeft)
             {
-                Coord.X += moveSpeed * ((float)GameWindow.DeltaTime);
+                Coord.X += MoveSpeed * ((float)GameWindow.DeltaTime);
 
-                if (maxX < Coord.X)
+                if (MaxX < Coord.X)
                 {
-                    isMoveingLeft = true;
+                    IsMoveingLeft = true;
                 }
             }
+
+            Shoot();
             base.Move();
+        }
+
+        private void Shoot()
+        {
+            if (Random.NextDouble() >= 0.999d)
+            {
+                EntityHandler.CreateBullet(Coord.X + Sprite.SpriteImage.Width / 2, Coord.Y, Tags.EnemyBullet);
+            }
         }
 
         internal override void Destroy()

@@ -22,17 +22,52 @@ namespace SpaceInvaders.EntityRelated
 
         public void AdjustSpritePosition()
         {
-            Coord.X -= Sprite.SpriteImage.Width / 2;
+            if (Tag == Tags.PlayerBullet)
+            {
+                Coord.X -= Sprite.SpriteImage.Width / 2;
+            }
+            else if (Tag == Tags.EnemyBullet)
+            {
+                Coord.X -= Sprite.SpriteImage.Width / 2;
+                Coord.Y += Sprite.SpriteImage.Height;
+
+                Sprite.SpriteImage.RotateFlip(RotateFlipType.Rotate180FlipNone);
+
+                for (int i = 0; i < Sprite.SpriteImage.Width; i++)
+                {
+                    for (int y = 0; y < Sprite.SpriteImage.Height; y++)
+                    {
+                        if (Sprite.SpriteImage.GetPixel(i, y).A != 255)
+                        {
+                            continue;
+                        }
+                        Sprite.SpriteImage.SetPixel(i, y, Color.Aquamarine);
+                    }
+                }
+            }
         }
 
         public override void Move()
         {
-            if (Coord.Y <= 50)
+            if (Tag == Tags.PlayerBullet)
             {
-                Destroy();
-                return;
+                if (Coord.Y <= 50)
+                {
+                    Destroy();
+                    return;
+                }
+                Coord.Y -= MoveSpeed * (float)GameWindow.DeltaTime;
             }
-            Coord.Y -= MoveSpeed * (float)GameWindow.DeltaTime;
+            else if (Tag == Tags.EnemyBullet)
+            {
+                if (Coord.Y >= GameWindow.ScreenHeigth)
+                {
+                    Destroy();
+                    return;
+                }
+                Coord.Y += MoveSpeed * (float)GameWindow.DeltaTime;
+            }
+
             base.Move();
         }
 
@@ -44,7 +79,8 @@ namespace SpaceInvaders.EntityRelated
 
         internal override void OnCollision(Entity sender, EventArgs e)
         {
-            if (sender.Tag != Tags.Player && sender.Tag != Tags.PlayerBullet)
+            if ((Tag == Tags.PlayerBullet && sender.Tag != Tags.Player && sender.Tag != Tags.PlayerBullet)
+                || (Tag == Tags.EnemyBullet && sender.Tag != Tags.Enemy && sender.Tag != Tags.EnemyBullet))
             {
                 Destroy();
                 sender.Destroy();

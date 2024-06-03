@@ -31,7 +31,7 @@ namespace SpaceInvaders.EntityRelated
             {
                 Coord.X += moveSpeed * (float)GameWindow.DeltaTime;
             }
-            if (keys[(int)KeyIndex.Space] && EntityHandler.GetAmountOfPlayerBullets() < MaxPlayerBulltets)
+            if (keys[(int)KeyIndex.Space])
             {
                 EntityHandler.CreateBullet(Coord.X + Sprite.SpriteImage.Width / 2, Coord.Y, Tags.PlayerBullet);
             }
@@ -41,13 +41,14 @@ namespace SpaceInvaders.EntityRelated
 
         internal override void Destroy()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         internal override void OnCollision(Entity sender, EventArgs e)
         {
             if (sender.Tag == Tags.EnemyBullet)
             {
+                sender.Destroy();
             }
         }
     }

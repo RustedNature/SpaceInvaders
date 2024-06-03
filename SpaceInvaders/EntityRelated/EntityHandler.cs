@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpaceInvaders.EntityRelated
+﻿namespace SpaceInvaders.EntityRelated
 {
     internal static class EntityHandler
     {
@@ -14,6 +8,9 @@ namespace SpaceInvaders.EntityRelated
         private const int GapSpots = 11;
         private const int VerticalGapBetweenEnemies = 15;
         private const int EnemyRowsPlusOne = 6;
+        private const int MaxEnemyBullet = 5;
+        private const int MaxPlayerBullet = 1;
+
         private static List<Entity> activeEntities = new();
         private static List<Entity> markedForRemoveEntities = new();
 
@@ -22,9 +19,18 @@ namespace SpaceInvaders.EntityRelated
 
         public static void CreateBullet(float startX, float starY, Tags tag)
         {
-            Bullet bullet = new Bullet(startX, starY, tag);
-            bullet.AdjustSpritePosition();
-            activeEntities.Add(bullet);
+            if (tag == Tags.PlayerBullet && MaxPlayerBullet > GetAmountOfEntitiesWithTag(tag))
+            {
+                Bullet bullet = new(startX, starY, tag);
+                bullet.AdjustSpritePosition();
+                activeEntities.Add(bullet);
+            }
+            else if (tag == Tags.EnemyBullet && MaxEnemyBullet > GetAmountOfEntitiesWithTag(tag))
+            {
+                Bullet bullet = new(startX, starY, tag);
+                bullet.AdjustSpritePosition();
+                activeEntities.Add(bullet);
+            }
         }
 
         public static Enemy CreateEnemy(int posX, int posY)
@@ -38,12 +44,12 @@ namespace SpaceInvaders.EntityRelated
         {
             CreateEnemyGrid();
 
-            CreatePlayer("Player", 400, 600 - 46);
+            CreatePlayer("Player", 400, 600 - SpriteHeight);
         }
 
         private static void CreateEnemyGrid()
         {
-            int distanceBetweenTwoEnemies = (GameWindow.ScreenWidth - MaxEnemies * SpriteWidth) / GapSpots;
+            int distanceBetweenTwoEnemies = (GameWindow.ScreenWidth - (MaxEnemies * SpriteWidth)) / GapSpots;
             for (int y = 1; y < EnemyRowsPlusOne; y++)
             {
                 for (int x = 1; x < GapSpots; x++)
@@ -53,7 +59,7 @@ namespace SpaceInvaders.EntityRelated
                         CreateEnemy(distanceBetweenTwoEnemies, (SpriteHeight + VerticalGapBetweenEnemies) * y);
                         continue;
                     }
-                    CreateEnemy(distanceBetweenTwoEnemies * x + (x - 1) * SpriteWidth, (SpriteHeight + VerticalGapBetweenEnemies) * y);
+                    CreateEnemy((distanceBetweenTwoEnemies * x) + ((x - 1) * SpriteWidth), (SpriteHeight + VerticalGapBetweenEnemies) * y);
                 }
             }
         }
@@ -65,9 +71,9 @@ namespace SpaceInvaders.EntityRelated
             return p;
         }
 
-        public static int GetAmountOfPlayerBullets()
+        public static int GetAmountOfEntitiesWithTag(Tags tag)
         {
-            return activeEntities.Count(e => e.Tag == Tags.PlayerBullet);
+            return activeEntities.Count(e => e.Tag == tag);
         }
 
         public static void UpateActiveEntitiesList()
