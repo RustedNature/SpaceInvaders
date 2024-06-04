@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.DirectoryServices;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpaceInvaders.EntityRelated
+﻿namespace SpaceInvaders.EntityRelated
 {
     internal class Bullet : Entity
     {
@@ -33,39 +25,43 @@ namespace SpaceInvaders.EntityRelated
 
                 Sprite.SpriteImage.RotateFlip(RotateFlipType.Rotate180FlipNone);
 
-                for (int i = 0; i < Sprite.SpriteImage.Width; i++)
+                RecolorEnemyBullet();
+            }
+        }
+
+        private void RecolorEnemyBullet()
+        {
+            for (int i = 0; i < Sprite.SpriteImage.Width; i++)
+            {
+                for (int y = 0; y < Sprite.SpriteImage.Height; y++)
                 {
-                    for (int y = 0; y < Sprite.SpriteImage.Height; y++)
+                    if (Sprite.SpriteImage.GetPixel(i, y).A != 255)
                     {
-                        if (Sprite.SpriteImage.GetPixel(i, y).A != 255)
-                        {
-                            continue;
-                        }
-                        Sprite.SpriteImage.SetPixel(i, y, Color.Aquamarine);
+                        continue;
                     }
+                    Sprite.SpriteImage.SetPixel(i, y, Color.LightSeaGreen);
                 }
             }
         }
 
         public override void Move()
         {
-            if (Tag == Tags.PlayerBullet)
+            float deltaTime = (float)GameWindow.DeltaTime;
+            int screenHeight = GameWindow.ScreenHeight;
+
+            switch (Tag)
             {
-                if (Coord.Y <= 50)
-                {
-                    Destroy();
-                    return;
-                }
-                Coord.Y -= MoveSpeed * (float)GameWindow.DeltaTime;
-            }
-            else if (Tag == Tags.EnemyBullet)
-            {
-                if (Coord.Y >= GameWindow.ScreenHeigth)
-                {
-                    Destroy();
-                    return;
-                }
-                Coord.Y += MoveSpeed * (float)GameWindow.DeltaTime;
+                case Tags.PlayerBullet:
+                    Coord.Y -= MoveSpeed * deltaTime;
+                    if (Coord.Y <= 50)
+                        Destroy();
+                    break;
+
+                case Tags.EnemyBullet:
+                    Coord.Y += MoveSpeed * deltaTime;
+                    if (Coord.Y >= screenHeight)
+                        Destroy();
+                    break;
             }
 
             base.Move();
