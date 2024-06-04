@@ -12,8 +12,7 @@ namespace SpaceInvaders
         private readonly System.Timers.Timer gameTimer;
         private readonly object graphicsLock = new();
         private readonly Stopwatch stopwatch = new();
-        private Graphics bufferGraphics;
-        private Bitmap bufferMap;
+
         private int frameCounter = 1;
         private bool isGameLoopRunning;
 
@@ -28,10 +27,7 @@ namespace SpaceInvaders
             Text = "Space Invaders";
             ClientSize = new Size(Width, Height);
 
-            bufferMap = new Bitmap(ScreenWidth, ScreenHeight);
-            bufferGraphics = Graphics.FromImage(bufferMap);
-
-            EntityHandler.CreateEntities();
+            EntityManager.CreateEntities();
 
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
@@ -55,10 +51,7 @@ namespace SpaceInvaders
         {
             lock (graphicsLock)
             {
-                bufferGraphics.Clear(BackColor);
-                RenderEntities();
-
-                e.Graphics.DrawImage(bufferMap, 0, 0);
+                Renderer.Render(e);
             }
 
             base.OnPaint(e);
@@ -71,13 +64,6 @@ namespace SpaceInvaders
 
         private static void MoveEntities()
         {
-            //Copy into temporary list to bypass exception
-            var tempEntities = new List<Entity>(EntityHandler.Entities);
-
-            foreach (var entity in tempEntities)
-            {
-                entity.Move();
-            }
         }
 
         private void Debugging()
@@ -121,8 +107,8 @@ namespace SpaceInvaders
 
         private void GameUpdate()
         {
-            MoveEntities();
-            EntityHandler.UpateActiveEntitiesList();
+            EntityManager.MoveEntities();
+            EntityManager.UpateActiveEntitiesList();
             ColliderList.UpdateColliderList();
             Debugging();
         }
@@ -135,15 +121,6 @@ namespace SpaceInvaders
         private void OnKeyUp(object? sender, KeyEventArgs e)
         {
             InputController.ResetKey(e.KeyCode);
-        }
-
-        private void RenderEntities()
-        {
-            EntityHandler.Entities.ForEach(e =>
-            {
-                bufferGraphics.DrawImage(e.Sprite.SpriteImage, e.Coord.X, e.Coord.Y, e.Sprite.SpriteImage.Width, e.Sprite.SpriteImage.Height);
-                //Debug.WriteLine($"{e} drawn at X:{e.Coord.X} Y:{e.Coord.Y} and its {e.Sprite.SpriteImage.Width}x{e.Sprite.SpriteImage.Height}");
-            });
         }
     }
 }
