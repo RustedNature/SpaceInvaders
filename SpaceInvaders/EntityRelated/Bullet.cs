@@ -69,7 +69,7 @@
 
         internal override void Destroy()
         {
-            EntityHandler.MarkForRemove(this);
+            EntityManager.MarkForRemove(this);
             ColliderList.MarkForRemove(Collider);
         }
 

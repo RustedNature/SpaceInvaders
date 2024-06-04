@@ -53,13 +53,13 @@
         {
             if (Random.NextDouble() >= 0.999d)
             {
-                EntityHandler.CreateBullet(Coord.X + Sprite.SpriteImage.Width / 2, Coord.Y, Tags.EnemyBullet);
+                EntityManager.CreateBullet(Coord.X + Sprite.SpriteImage.Width / 2, Coord.Y, Tags.EnemyBullet);
             }
         }
 
         internal override void Destroy()
         {
-            EntityHandler.MarkForRemove(this);
+            EntityManager.MarkForRemove(this);
             ColliderList.MarkForRemove(Collider);
         }
 

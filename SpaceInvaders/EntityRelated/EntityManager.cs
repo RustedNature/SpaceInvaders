@@ -1,6 +1,6 @@
 ﻿namespace SpaceInvaders.EntityRelated
 {
-    internal static class EntityHandler
+    internal static class EntityManager
     {
         private const int MaxEnemies = 10;
         private const int SpriteWidth = 46;
@@ -89,6 +89,14 @@
         internal static void MarkForRemove(Entity entity)
         {
             MarkedForRemoveEntities.Add(entity);
+        }
+
+        internal static void MoveEntities()
+        {
+            //Copy into temporary list to bypass exception
+            var tempEntities = new List<Entity>(Entities);
+
+            tempEntities.ForEach(e => e.Move());
         }
     }
 }
