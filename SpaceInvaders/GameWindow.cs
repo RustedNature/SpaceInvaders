@@ -20,7 +20,7 @@ namespace SpaceInvaders
         public GameWindow()
         {
             Width = ScreenWidth;
-            Height = ScreenHeigth;
+            Height = ScreenHeight;
             BackColor = Color.Black;
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
@@ -28,7 +28,7 @@ namespace SpaceInvaders
             Text = "Space Invaders";
             ClientSize = new Size(Width, Height);
 
-            bufferMap = new Bitmap(ScreenWidth, ScreenHeigth);
+            bufferMap = new Bitmap(ScreenWidth, ScreenHeight);
             bufferGraphics = Graphics.FromImage(bufferMap);
 
             EntityHandler.CreateEntities();
@@ -48,7 +48,7 @@ namespace SpaceInvaders
 
         public static double DeltaTime { get => deltaTime; private set => deltaTime = value; }
 
-        public static int ScreenHeigth => screenHeigth;
+        public static int ScreenHeight => screenHeigth;
         public static int ScreenWidth => screenWidth;
 
         protected override void OnPaint(PaintEventArgs e)
