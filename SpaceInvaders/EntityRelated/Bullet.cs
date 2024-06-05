@@ -46,7 +46,7 @@
 
         public override void Move()
         {
-            float deltaTime = (float)GameWindow.DeltaTime;
+            float deltaTime = (float)GameLoop.DeltaTime;
             int screenHeight = GameWindow.ScreenHeight;
 
             switch (Tag)

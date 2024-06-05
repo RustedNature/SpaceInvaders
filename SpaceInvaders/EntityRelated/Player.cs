@@ -25,11 +25,11 @@ namespace SpaceInvaders.EntityRelated
             BitArray keys = InputController.Keys;
             if ((keys[(int)KeyIndex.Left] || keys[(int)KeyIndex.A]) && Coord.X > 0)
             {
-                Coord.X -= moveSpeed * (float)GameWindow.DeltaTime;
+                Coord.X -= moveSpeed * (float)GameLoop.DeltaTime;
             }
             else if ((keys[(int)KeyIndex.Right] || keys[(int)KeyIndex.D]) && Coord.X < GameWindow.ScreenWidth - Sprite.SpriteImage.Width)
             {
-                Coord.X += moveSpeed * (float)GameWindow.DeltaTime;
+                Coord.X += moveSpeed * (float)GameLoop.DeltaTime;
             }
             if (keys[(int)KeyIndex.Space])
             {

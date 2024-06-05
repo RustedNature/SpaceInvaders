@@ -28,7 +28,7 @@
         {
             if (IsMoveingLeft)
             {
-                Coord.X -= MoveSpeed * ((float)GameWindow.DeltaTime);
+                Coord.X -= MoveSpeed * ((float)GameLoop.DeltaTime);
                 if (MinX > Coord.X)
                 {
                     IsMoveingLeft = false;
@@ -37,7 +37,7 @@
 
             if (!IsMoveingLeft)
             {
-                Coord.X += MoveSpeed * ((float)GameWindow.DeltaTime);
+                Coord.X += MoveSpeed * ((float)GameLoop.DeltaTime);
 
                 if (MaxX < Coord.X)
                 {
